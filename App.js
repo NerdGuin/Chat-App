@@ -10,7 +10,7 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style='auto' />
       <View style={sidebar.container}>
-        <Text style={sidebar.title}>Communital</Text>
+        <Text style={sidebar.title}>CHAT APP</Text>
         <View style={sidebar.list}>
           <Ionicons name='search-sharp' size={20} color='white' />
           <Entypo name='dots-three-vertical' size={20} color='white' />
