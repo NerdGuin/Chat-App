@@ -28,7 +28,7 @@ export default function App() {
         <View style={chats.chat}>
           <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/system/resources/previews/024/059/039/original/digital-art-of-a-cat-head-cartoon-with-sunglasses-illustration-of-a-feline-avatar-wearing-glasses-vector.jpg' }}></Image>
           <Text style={chats.title}>João</Text>
-          <Text style={chats.subtitle}>Beleza!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+          <Text style={chats.subtitle}>Beleza!</Text>
         </View>
 
         <View style={chats.chat}>
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 
 const chats = StyleSheet.create({
   container: {
+    flex: 1,
     position: 'absolute',
     top: 128,
     height: '100%',
@@ -87,7 +88,8 @@ const chats = StyleSheet.create({
     fontSize: 20,
     left: 72,
     top: 30,
-    maxWidth: 256,
+    maxWidth: 290,
+    height: 20
   }
 });
 
