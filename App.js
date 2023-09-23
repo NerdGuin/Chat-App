@@ -1,80 +1,109 @@
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native';
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Swiper from 'react-native-swiper';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+export default function App() {
+  const [chatList, setChats] = useState([]);
+  const [isPage, setPage] = useState(0); // 0=CHATS | 1=STATUS | 2=ABOUT
+  const swiperRef = useRef(null);
 
-var currentMenu = 'CHATS';
+  const addChat = (e) => {
+    if (!e.name) e.name = 'Sem nome';
+    if (!e.lastMessage) e.lastMessage = '';
+    const newChat = {
+      id: Math.floor(Math.random() * 99999),
+      name: e.name,
+      lastMessage: e.lastMessage
+    };
+    setChats([...chatList, newChat]);
+  };
 
-class Main extends React.Component {
-  constructor(props) {
-    super(props);
-    this.homeTitle = React.createRef();
+  const goToSlide = (slideIndex) => {
+    if (swiperRef.current) {
+      swiperRef.current.scrollBy(slideIndex - swiperRef.current.state.index);
+    }
+  };
+
+  function changePage(e) {
+    setPage(e);
+    goToSlide(e);
   }
 
-  selectMenu() {
-    console.log('selectMenu called');
-    this.homeTitle.current.value = 'CHAT APP v2.0';
-  }
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     console.log('Page: '+isPage);
+  //   }, 800);
+  // });
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar style='auto' />
-        <this.Sidebar />
-        <ChatsPage />
-      </View>
-    );
-  }
-
-  Sidebar() {
+  function Sidebar() {
     return (
       <View style={sidebar.container}>
-        <Text style={sidebar.title} ref={this.homeTitle}>CHAT APP</Text>
+        <Text style={sidebar.title} onPress={() => { addChat({ name: 'Daniel', lastMessage: 'Okay.' }) }}>Chat App</Text>
         <View style={sidebar.list}>
-          <Ionicons name='search-sharp' size={20} color='white' />
+          <Ionicons name='search-sharp' size={20} color='white'/>
           <Entypo name='dots-three-vertical' size={20} color='white' />
         </View>
         <View style={sidebar2.container}>
           <View style={sidebar2.list}>
-            <TouchableOpacity style={sidebar2.button} onPress={this.selectMenu}><Text style={sidebar2.buttonText}>CHATS</Text></TouchableOpacity>
-            <TouchableOpacity style={sidebar2.button}><Text style={sidebar2.buttonText}>STATUS</Text></TouchableOpacity>
-            <TouchableOpacity style={sidebar2.button}><Text style={sidebar2.buttonText}>ABOUT</Text></TouchableOpacity>
+            <TouchableOpacity style={[isPage==0 && sidebar2.buttonSelected, isPage!=0 && sidebar2.button]} onPress={() => {changePage(0)}}><Text style={sidebar2.buttonText}>CHATS</Text></TouchableOpacity>
+            <TouchableOpacity style={[isPage==1 && sidebar2.buttonSelected, isPage!=1 && sidebar2.button]} onPress={() => {changePage(1)}}><Text style={sidebar2.buttonText}>STATUS</Text></TouchableOpacity>
+            <TouchableOpacity style={[isPage==2 && sidebar2.buttonSelected, isPage!=2 && sidebar2.button]} onPress={() => {changePage(2)}}><Text style={sidebar2.buttonText}>ABOUT</Text></TouchableOpacity>
           </View>
         </View>
       </View>
     );
   }
-}
 
-
-
-function ChatsPage() {
-  return (
-    <View style={chats.container}>
-      <View style={chats.chat}>
-        <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/system/resources/previews/024/059/039/original/digital-art-of-a-cat-head-cartoon-with-sunglasses-illustration-of-a-feline-avatar-wearing-glasses-vector.jpg' }}></Image>
-        <Text style={chats.title}>João</Text>
-        <Text style={chats.subtitle}>Beleza!</Text>
+  function ChatsPage() {
+    return (
+      <View style={chats.container}>
+        <View style={chats.chat}>
+          <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/ti/vetor-gratis/p3/9292244-default-avatar-icon-vector-of-social-media-user-vetor.jpg' }}></Image>
+          <Text style={chats.title}>Sophia</Text>
+          <Text style={chats.subtitle}>Hi, how are you?</Text>
+        </View>
+        {chatList.map((chat, index) => (
+          <View style={chats.chat} key={index}>
+            <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/ti/vetor-gratis/p3/9292244-default-avatar-icon-vector-of-social-media-user-vetor.jpg' }}></Image>
+            <Text style={chats.title}>{chat.name}</Text>
+            <Text style={chats.subtitle}>{chat.lastMessage}</Text>
+          </View>
+        ))}
       </View>
+    );
+  }
 
-      <View style={chats.chat}>
-        <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/ti/vetor-gratis/p3/9292244-default-avatar-icon-vector-of-social-media-user-vetor.jpg' }}></Image>
-        <Text style={chats.title}>Maria</Text>
-        <Text style={chats.subtitle}>Oi, tudo bem?</Text>
+  function StatusPage() {
+    return (
+      <View style={chats.container}>
+        <Text>Page under development</Text>
       </View>
-    </View>
-  );
-}
+    );
+  }
 
-function AboutPage() {
+  function AboutPage() {
+    return (
+      <View style={chats.container}>
+        <Text>Page under development</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={chats.container}>
-      <Text style={about.title}>Olá!</Text>
+    <View style={styles.container}>
+      <StatusBar style='auto' />
+      <Sidebar />
+      <Swiper ref={swiperRef} style={styles.wrapper} paginationStyle={{display: 'none'}} scrollEnabled={false} >
+        <ChatsPage />
+        <StatusPage />
+        <AboutPage />
+      </Swiper>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -84,13 +113,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  wrapper: {
+    top: 128
+  }
 });
 
-const chats = StyleSheet.create({
+export const chats = StyleSheet.create({
   container: {
     flex: 1,
     position: 'absolute',
-    top: 128,
     height: '100%',
     width: '100%',
     alignItems: 'center',
@@ -136,7 +167,8 @@ const sidebar = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: '100%',
-    height: 128
+    height: 128,
+    zIndex: 10,
   },
   title: {
     color: 'white',
@@ -174,8 +206,15 @@ const sidebar2 = StyleSheet.create({
     gap: 8,
   },
   buttonSelected: {
-    marginBottom: -3,
-    borderBottomWidth: 3,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    height: 50,
+    width: 64,
+
+    marginBottom: -6,
+    borderBottomWidth: 6,
     borderBottomColor: 'white'
   },
   button: {
@@ -192,22 +231,3 @@ const sidebar2 = StyleSheet.create({
     fontWeight: 'bold',
   }
 })
-
-const about = StyleSheet.create({
-  container: {
-    backgroundColor: '#01816A',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 80,
-    width: '100%',
-    height: 48
-  },
-  title: {
-    color: 'black',
-    fontSize: 20,
-    fontWeight: 'bold',
-  }
-})
-
-export default Main;
