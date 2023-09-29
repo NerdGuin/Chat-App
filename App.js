@@ -63,14 +63,19 @@ export default function App() {
       <View style={chats.container}>
         <View style={chats.chat}>
           <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/ti/vetor-gratis/p3/9292244-default-avatar-icon-vector-of-social-media-user-vetor.jpg' }}></Image>
-          <Text style={chats.title}>Sophia</Text>
-          <Text style={chats.subtitle}>Hi, how are you?</Text>
+          <Text style={chats.title} numberOfLines={1}>Sophia</Text>
+          <Text style={chats.subtitle} numberOfLines={1}>Hi, how are you?</Text>
+        </View>
+        <View style={chats.chat}>
+          <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/ti/vetor-gratis/p3/9292244-default-avatar-icon-vector-of-social-media-user-vetor.jpg' }}></Image>
+          <Text style={chats.title}>Sophia 2</Text>
+          <Text style={chats.subtitle} numberOfLines={1}>Hi, how are youeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?</Text>
         </View>
         {chatList.map((chat, index) => (
           <View style={chats.chat} key={index}>
             <Image style={chats.avatar} source={{ uri: 'https://static.vecteezy.com/ti/vetor-gratis/p3/9292244-default-avatar-icon-vector-of-social-media-user-vetor.jpg' }}></Image>
-            <Text style={chats.title}>{chat.name}</Text>
-            <Text style={chats.subtitle}>{chat.lastMessage}</Text>
+            <Text style={chats.title} numberOfLines={1}>{chat.name}</Text>
+            <Text style={chats.subtitle} numberOfLines={1}>{chat.lastMessage}</Text>
           </View>
         ))}
       </View>
@@ -130,13 +135,12 @@ export const chats = StyleSheet.create({
   chat: {
     position: 'relative',
     width: '100%',
-    height: 64,
+    minHeight: 64,
     justifyContent: 'center',
     borderBottomWidth: 0.3,
     gap: -3,
-  },
-  chatHover: {
-    backgroundColor: 'red'
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   avatar: {
     width: 48,
@@ -155,7 +159,6 @@ export const chats = StyleSheet.create({
     fontSize: 20,
     left: 72,
     maxWidth: 290,
-    height: 20,
   }
 });
 
@@ -203,7 +206,6 @@ const sidebar2 = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 8,
   },
   buttonSelected: {
     display: 'flex',
@@ -211,7 +213,8 @@ const sidebar2 = StyleSheet.create({
     alignItems: 'center',
 
     height: 50,
-    width: 64,
+    marginLeft: 4,
+    marginRight: 4,
 
     marginBottom: -6,
     borderBottomWidth: 6,
@@ -223,7 +226,8 @@ const sidebar2 = StyleSheet.create({
     alignItems: 'center',
 
     height: 50,
-    width: 64,
+    marginLeft: 4,
+    marginRight: 4,
   },
   buttonText: {
     color: 'white',
